@@ -1,3 +1,5 @@
+import re
+
 ELEMENT_NAMES = [
     "Hydrogen", "Helium", 
     "Lithium", "Beryllium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine", "Neon", 
@@ -25,3 +27,24 @@ ELEMENT_SYMBOLS = [
     "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", 
     "Ds", "Rg", "Cn", "Nh", "Fl", "Mc", "Lv", "Ts", "Og"
 ]
+
+def chemname(str):
+    index = 0
+    results = []
+
+    if re.findall("[^A-Za-z ]", str) != []:
+        return []
+    
+    for symbol in ELEMENT_SYMBOLS:
+        if re.findall(re.compile(f"^{symbol}", re.IGNORECASE), str):
+            if len(symbol) == len(str):
+                results.append([symbol])
+            else:
+                tempResults = []
+
+                for tempResult in name(str[len(symbol):]):
+                    tempResults.append([symbol] + tempResult)
+
+                results.extend(tempResults)
+    
+    return results
